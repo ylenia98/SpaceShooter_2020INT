@@ -23,15 +23,35 @@ public class Player : MonoBehaviour
     //attribute - exposes the variable inside Unity
     private float _speed = 3.5f;
 
+    [SerializeField]
+
+    private GameObject _laserPrefab;
+
+    [SerializeField]
+
+    private float _fireRate = 0.5f;
+    private float _nextFire = -1.0f;
+
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
     }
     
+    void Update()
+    {
+        CalculateMovement();
+        
+
+        //if i hit the space key I want to spawn the laser
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFire) // if i hit the space key and the game time is greater than nextFire, reset next fire = current time + fire rate
+        {
+            FireLaser();
+        }
+    }
 
     // Update is called once per frame
-    void Update()
+    void CalculateMovement()
     {
         /*
         // Vector3.right = new Vector3(1, 0, 0)
@@ -52,7 +72,7 @@ public class Player : MonoBehaviour
 
         );
 
-         transform.Translate(direction * _speed * Time.deltaTime);
+        transform.Translate(direction * _speed * Time.deltaTime);
 
          // if the player position on the Y axis is > 0 
          // y position = 0
@@ -60,12 +80,12 @@ public class Player : MonoBehaviour
          // y position = -4.5
          if(transform.position.y > 0)
          {
-             transform.position = new Vector3(transform.position.x, 0, 0);
+            transform.position = new Vector3(transform.position.x, 0, 0);
             
          }
          else if(transform.position.y < -4.5)
          {
-             transform.position = new Vector3(transform.position.x, -4.5f, 0);
+            transform.position = new Vector3(transform.position.x, -4.5f, 0);
 
          }
 
@@ -73,7 +93,27 @@ public class Player : MonoBehaviour
          // X position = -11.5
          // else if X position < -11.5
          // X position = 11.5
+         if(transform.position.x > 11.5f)
+        {
+            transform.position = new Vector3(-11.5f, transform.position.y, 0);
+        }
+         else if(transform.position.x < -11.5f)
+        {
+            transform.position = new Vector3(11.5f, transform.position.y, 0);
+        }
          
 
+    }
+
+    void FireLaser()
+    {
+        _nextFire = Time.time + _fireRate;
+
+        //Calculate 0.8 units vertically from the player
+        Vector3 laserPos = transform.position + new Vector3(0, 0.8f, 0);
+
+        // first write this code to know if it is working, then remove it Debug.Log("The space key was pressed");
+        //Quaternion identity =  default rotation (0, 0, 0).
+        Instantiate(_laserPrefab, laserPos, Quaternion.identity);
     }
 }
