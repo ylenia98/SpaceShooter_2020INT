@@ -33,10 +33,34 @@ public class Enemy : MonoBehaviour
         //Damage the player
         //Destroy this gameobject
 
+
+        if(other.tag == "Player")
+        {
+
+            //other.GetComponent<Player>().Damage(); to access the script and to damage 
+
+            // this will create a reference to the player script
+            //Accesses the player script thorugh the "other" variable
+            Player player = other.GetComponent<Player>(); 
+
+            //check that the script exsits before using it
+            if(player != null)
+            {
+                player.Damage();
+            }
+            Destroy(this.gameObject);
+        }
+
         //if the "other" object's tag is Laser
         //Destroy the laser
         //Destroy this gameobject
 
-        
+        if(other.tag == "Laser")
+        {
+            Destroy(other.gameObject);
+            Destroy(this.gameObject);
+        }
+
+
     }
 }

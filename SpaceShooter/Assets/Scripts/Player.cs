@@ -32,6 +32,9 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _nextFire = -1.0f;
 
+    [SerializeField]
+    private int _lives = 3;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -115,5 +118,24 @@ public class Player : MonoBehaviour
         // first write this code to know if it is working, then remove it Debug.Log("The space key was pressed");
         //Quaternion identity =  default rotation (0, 0, 0).
         Instantiate(_laserPrefab, laserPos, Quaternion.identity);
+    }
+
+
+    public void Damage()
+    {
+        // reduce the player's lives by 1
+
+        //different type of how to write -1 from lives
+       // _lives = _lives - 1;
+        _lives -= 1;
+       // _lives--;
+
+        //check if dead
+        //destory us
+
+        if(_lives < 1)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
