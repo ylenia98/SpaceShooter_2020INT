@@ -13,6 +13,8 @@ public class SpawnManager : MonoBehaviour
 
     private GameObject _enemyContainer;
 
+    private bool _stopSpawning = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,7 @@ public class SpawnManager : MonoBehaviour
         //create new enemy objects
         //wait for 3 seconds
 
-        while (true)
+        while (_stopSpawning == false)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7f, 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
@@ -38,6 +40,11 @@ public class SpawnManager : MonoBehaviour
 
             yield return new WaitForSeconds(3f);
         }
+    }
+
+    public void OnPlayerDeath()
+    {
+        _stopSpawning = true;
     }
 
    
