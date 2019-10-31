@@ -17,15 +17,14 @@ public class Player : MonoBehaviour
     every variable needs a name
     Step 4: optional value               
 */
+    [Header("Player Options")]
 
     [SerializeField]
 
     //attribute - exposes the variable inside Unity
     private float _speed = 3.5f;
 
-    [SerializeField]
-
-    private GameObject _laserPrefab;
+   
 
     [SerializeField]
 
@@ -36,6 +35,21 @@ public class Player : MonoBehaviour
     private int _lives = 3;
 
     private SpawnManager _spawnManager;
+
+    
+    [Header("Laser")]
+    [SerializeField]
+
+    private GameObject _laserPrefab;
+
+    [Header("Triple Shot")]
+    [SerializeField]
+
+    private GameObject _tripleShotPrefab;
+
+    [SerializeField]
+
+    private bool _isTripleShotActive = false;
 
     // Start is called before the first frame update
     void Start()
@@ -120,12 +134,24 @@ public class Player : MonoBehaviour
     {
         _nextFire = Time.time + _fireRate;
 
-        //Calculate 0.8 units vertically from the player
-        Vector3 laserPos = transform.position + new Vector3(0, 0.8f, 0);
+        //check if isTripleShot is active
+        // instantiate the triple shot prefab
+        // else fire 1 laser
 
-        // first write this code to know if it is working, then remove it Debug.Log("The space key was pressed");
-        //Quaternion identity =  default rotation (0, 0, 0).
-        Instantiate(_laserPrefab, laserPos, Quaternion.identity);
+        if (_isTripleShotActive == true)
+        {
+            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else
+        {
+
+            //Calculate 0.8 units vertically from the player
+            Vector3 laserPos = transform.position + new Vector3(0, 0.8f, 0);
+
+            // first write this code to know if it is working, then remove it Debug.Log("The space key was pressed");
+            //Quaternion identity =  default rotation (0, 0, 0).
+            Instantiate(_laserPrefab, laserPos, Quaternion.identity);
+        }
     }
 
 
