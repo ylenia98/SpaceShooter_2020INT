@@ -13,6 +13,10 @@ public class SpawnManager : MonoBehaviour
 
     private GameObject _enemyContainer;
 
+    [SerializeField]
+
+    private GameObject[] _powerupPrefabs;
+
     private bool _stopSpawning = false;
 
     // Start is called before the first frame update
@@ -21,10 +25,11 @@ public class SpawnManager : MonoBehaviour
         // StartCoroutine("SpawnRoutine");   or
         // StartCouroutine(SpawnRoutine());
 
-        StartCoroutine(SpawnRoutine());
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnEnemyRoutine());
     }
 
-    IEnumerator SpawnRoutine()
+    IEnumerator SpawnEnemyRoutine()
     {
         //create an infinte while loop
         //create new enemy objects
@@ -40,6 +45,22 @@ public class SpawnManager : MonoBehaviour
 
             yield return new WaitForSeconds(3f);
         }
+    }
+
+    IEnumerator SpawnPowerUpRoutine()
+    {
+        // spawn a powerup every 5 - 7 seconds 
+        while (_stopSpawning == false)
+        {
+            Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7f, 0);
+
+            //will calculate an index between 0 and powerup length -1
+            int index = Random.Range(0, _powerupPrefabs.Length);
+            Instantiate(_powerupPrefabs[index], posToSpawn, Quaternion.identity);
+            
+            yield return new WaitForSeconds(Random.Range(5, 8));
+        }
+        
     }
 
     public void OnPlayerDeath()
