@@ -51,6 +51,21 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
 
+    [Header("Speed")]
+    [SerializeField]
+
+    private float _speedModifier = 2f;
+    private bool _isSpeedActive = false;
+
+    [Header("Shield")]
+    [SerializeField]
+
+    private GameObject _shieldVisualizer;
+
+    private bool _isShieldActive = false;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -96,6 +111,11 @@ public class Player : MonoBehaviour
             0
 
         );
+
+        if (_isSpeedActive == true)
+        {
+            direction *= _speedModifier;
+        }
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
@@ -157,6 +177,17 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        //if the shield powerup is active
+        // turn off the shield visualizer
+        // shield powerup = false
+        //stop the function from continuing;
+        if (_isShieldActive == true)
+        {
+            _shieldVisualizer.SetActive(false);
+            _isShieldActive = false;
+            return;
+        }
+
         // reduce the player's lives by 1
 
         //different type of how to write -1 from lives
@@ -183,10 +214,30 @@ public class Player : MonoBehaviour
         StartCoroutine(TripleShotPowerDownRoutine());
     }
 
+    public void ActivateSpeed()
+    {
+        _isSpeedActive = true;
+        StartCoroutine(SpeedPowerDownRoutine());
+
+    }
+
+    public void ActivateShield()
+    {
+        _isShieldActive = true;
+        _shieldVisualizer.SetActive(true);
+    }
+
+
     IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5f);
         _isTripleShotActive = false;
 
+    }
+
+    IEnumerator SpeedPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isSpeedActive = false;
     }
 }
